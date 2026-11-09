@@ -1,10 +1,12 @@
-# 滚轮工坊 · Squeek Wheelworks
+# Wheelworks
 
-Squeekchain 的已结算滚轮工作量决定每日生产工单。玩家在 5×5 格子上铺设、旋转机器和传送带，把木料和铁料分别送到装配台。每日成功交货为全服木桥贡献一箱，目标 50 箱。三个练习场可直接游玩。
+Wheelworks is a factory puzzle game powered by real hamster-wheel activity recorded by Squeekchain. Lay conveyors and rotate machines on a 5×5 grid to turn wood into boards and iron into gears. Route both parts to their matching docks within the daily power budget. Each completed daily order can contribute one crate to Acorn Creek Bridge. The community needs 50 crates to finish it.
 
-## 本地试玩
+[Play Wheelworks](https://squeek.guard-ai.live/). Choose **Practice** to try any of the three training layouts, or **Daily shift** to play today's order.
 
-在本目录执行：
+## Run locally
+
+From the repository root, run:
 
 ```sh
 nvm install
@@ -13,17 +15,23 @@ npm ci
 npm run dev
 ```
 
-打开终端打印的地址（默认 http://127.0.0.1:5186）。钱包登录使用浏览器以太坊扩展的消息签名。工单来源需要联网；服务不可用时练习场仍可玩。本地云存档模拟器使用被 Git 忽略的 `.local-data/`，与线上存档独立。开发服务每次重启会更新临时会话密钥。
+Open the URL printed in the terminal (default: `http://127.0.0.1:5186`). The daily shift needs an internet connection to fetch wheel data. Practice remains available when the feed is offline. To sign in, use an Ethereum browser wallet and sign the login message.
 
-## 数据与结算规则
+The development server stores blueprints in the Git-ignored `.local-data/` directory. Production saves live in a separate store. By default, restarting the development server generates a new session secret, so players sign in again.
 
-- 每日工单采用前一个完整 UTC 日的四个六小时**结算时间**桶。后端检查 Sepolia 链 ID、确认深度和结算时间覆盖，再使用工作量确定能源、需求和障碍。已确认的零工作量也生成可解的基础订单。暂缺的桶不会生成正式工单；定时任务与访问触发可重试。挑战以日期缓存。来源为 Squeekchain 公共索引 API，此版本的游戏成绩由游戏后端验证。
-- 浏览器即时保存当前草稿与个人最佳能耗。在线存档按钱包、UTC 日期和编辑小时归档。同一小时以最后保存的布局为准；可跨浏览器恢复，跨日载入最近的蓝图时会自动清空当日障碍或出入口位置。改动在下一个 UTC 整点开始参与离线生产。每日能源独立，按已结束的生产小时回算木板、齿轮；订单过期后可在工程记录查看昨日产量。练习成绩仅保存在本机。
-- 玩家以钱包签署限时挑战登录，服务端从会话确定交货者，重新模拟整张布局。每日每个钱包的固定贡献对应唯一对象键，多次提交和并发重试均只计一箱。木桥显示累计贡献至目标 50 箱。产量、能源和建材均为游戏数值。
-- 存档、离线计产与交货不发链上交易。使用两个钱包算作两个参与者。第一版钱包登录支持能通过 personal_sign 恢复签名地址的以太坊账户。
-- 成本随登录、存档、交货及对象读写量增长。后端按实际操作结算，无需为每个玩家每小时触发函数。公开运行时可在 EdgeOne 控制台为鉴权、存档接口配置限频并查看用量。
+## How the game works
 
-## 验证
+**Daily orders.** The backend reads four six-hour settlement intervals covering the previous full UTC day from the [Squeekchain API](https://docs.squeekchain.com/developers/api/). It checks the Sepolia chain ID, confirmation depth, and time coverage before issuing an order. The date and settled work determine the targets, power budget, and obstacles. A confirmed day with zero work still produces a solvable order. If an interval is missing, the daily shift stays pending until a scheduled or player-triggered retry succeeds. The backend caches the order by UTC date.
+
+**Blueprints and offline production.** The browser keeps the current draft and personal best power usage on the device. Cloud saves are grouped by wallet, UTC date, and hour. The last blueprint saved in an hour takes effect at the start of the next hour. Players can restore it in another browser. When loading an older blueprint, the game clears any equipment that overlaps the current day's rocks or docks. Practice results stay on the device.
+
+The backend calculates boards and gears for completed production hours against that day's power budget. The **Build log** shows yesterday's output after the daily shift rolls over.
+
+**Wallets and deliveries.** Sign-in uses a short-lived challenge and supports Ethereum accounts whose address can be recovered from a `personal_sign` signature. On delivery, the backend identifies the wallet from its session and simulates the submitted layout. Each wallet has one delivery record per UTC day, so retries and simultaneous submissions count as a single crate. Two different wallets count as two participants. Power, parts, and crates are in-game resources. Saving, offline production, and delivery require no blockchain transactions.
+
+**Service usage.** The backend calculates production on demand. Usage scales with sign-ins, saves, deliveries, and storage reads and writes. The EdgeOne console provides usage monitoring and rate limits for authentication and save endpoints.
+
+## Validation
 
 ```sh
 npm run format:check
@@ -32,4 +40,4 @@ npm test
 npm run build
 ```
 
-平台文档：[云函数](https://pages.edgeone.ai/document/node-functions)、[Blob](https://pages.edgeone.ai/document/blob-storage)、[定时任务](https://pages.edgeone.ai/document/edgeone-json)。数据源：[Squeekchain API](https://docs.squeekchain.com/developers/api/)。
+Platform documentation: [Cloud Functions](https://pages.edgeone.ai/document/node-functions), [Blob storage](https://pages.edgeone.ai/document/blob-storage), and [scheduled tasks](https://pages.edgeone.ai/document/edgeone-json).
