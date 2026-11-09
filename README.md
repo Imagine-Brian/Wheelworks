@@ -41,3 +41,5 @@ npm run build
 ```
 
 Platform documentation: [Cloud Functions](https://pages.edgeone.ai/document/node-functions), [Blob storage](https://pages.edgeone.ai/document/blob-storage), and [scheduled tasks](https://pages.edgeone.ai/document/edgeone-json).
+
+squeekchain-project: 690506e4-2683-4977-9270-fb3ef1fdb673
