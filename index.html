@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#10121a" />
+    <title>Wheelworks · Squeekchain</title>
+    <link rel="icon" href="/art/hamster.png" />
+  </head>
+  <body>
+    <header>
+      <div class="shell nav">
+        <a class="brand" href="./"
+          ><img src="/art/gear.png" alt="" />SQUEEKCHAIN</a
+        ><span class="brand-sub">Arcade</span>
+        <div class="nav-actions">
+          <button class="help" id="help">How to play <b>?</b></button
+          ><button class="wallet" id="wallet">Connect wallet</button>
+        </div>
+      </div>
+    </header>
+    <main class="shell">
+      <section class="intro">
+        <div>
+          <h1>Wheel<span>works</span></h1>
+          <p>Route wood and iron into parts for Acorn Creek Bridge.</p>
+        </div>
+        <div class="switch" aria-label="Game mode">
+          <button id="daily">Daily shift</button
+          ><button id="practice">Practice</button>
+        </div>
+      </section>
+      <div class="workshop">
+        <section class="panel floor">
+          <div class="floor-title">
+            <div>
+              <i class="lamp"></i>
+              <h2>Factory floor</h2>
+            </div>
+            <span class="serial" id="order-ref">5 × 5</span>
+          </div>
+          <div class="board-frame">
+            <div class="board-labels">
+              <span></span><span>A</span><span>B</span><span>C</span
+              ><span>D</span><span>E</span>
+            </div>
+            <div class="board-wrap">
+              <div class="row-labels">
+                <span>1</span><span>2</span><span>3</span><span>4</span
+                ><span>5</span>
+              </div>
+              <div id="board" class="board" aria-label="Factory layout"></div>
+            </div>
+            <div class="floor-key">
+              <span>▸ Raw material in</span><span>Finished goods out ▸</span>
+            </div>
+          </div>
+          <div class="toolhead">
+            <h3>Equipment</h3>
+            <div>
+              <button id="rotate">↻ Rotate <kbd>R</kbd></button
+              ><button id="undo">↶ Undo</button>
+            </div>
+          </div>
+          <div id="tools" class="tools" aria-label="Choose equipment"></div>
+          <p class="tool-tip" id="tool-tip"></p>
+        </section>
+        <aside class="desk">
+          <section class="order panel">
+            <div class="ticket-title">
+              <span class="dot-orange"></span>
+              <h2 id="order-name">Work order</h2>
+              <span class="serial" id="ticket-id">—</span>
+            </div>
+            <div class="ticket-body">
+              <div class="foreman">
+                <img
+                  src="/art/hamster.png"
+                  alt="Hamster mechanic with goggles and a wrench"
+                />
+                <p id="brief">Route wood and iron to their matching docks.</p>
+              </div>
+              <div class="items">
+                <div>
+                  <img src="/art/saw.png" alt="" /><span>Boards</span
+                  ><strong id="wood-count">—</strong>
+                </div>
+                <div>
+                  <img src="/art/gear.png" alt="" /><span>Gears</span
+                  ><strong id="metal-count">—</strong>
+                </div>
+              </div>
+              <div class="energy">
+                <div>
+                  <span>ϟ Power reserve</span><strong id="power">—</strong>
+                </div>
+                <progress id="energy-meter" value="1" max="1"></progress
+                ><small id="energy-note"></small>
+              </div>
+              <div id="level-picker" class="levels"></div>
+              <button class="start" id="run">▶ Run production</button
+              ><button class="deliver" id="deliver" hidden>
+                Deliver order
+              </button>
+              <p id="feedback" role="status" class="feedback">
+                Select a tool, then place it on the grid.
+              </p>
+            </div>
+          </section>
+          <section class="bridge panel">
+            <div class="bridge-top">
+              <div>
+                <small>Community build</small>
+                <h2>Acorn Creek Bridge</h2>
+              </div>
+              <span class="bridge-art" aria-hidden="true">▥━▥</span>
+            </div>
+            <progress id="bridge-meter" value="0" max="50"></progress>
+            <div class="bridge-meta">
+              <span id="bridge-count">Loading progress…</span
+              ><button id="bridge-info">Build log ↗</button>
+            </div>
+          </section>
+        </aside>
+      </div>
+      <div class="savebar">
+        <span id="save-info">Draft saved on this device</span>
+        <div>
+          <button id="restore">Load blueprint</button
+          ><button id="save">Save blueprint ↑</button>
+        </div>
+      </div>
+      <div class="foot">
+        <span>WHEELWORKS / SQUEEKCHAIN</span
+        ><span id="source">Reading wheel settlement…</span>
+      </div>
+    </main>
+    <dialog id="dialog" aria-labelledby="modal-title">
+      <div class="modal-head">
+        <h2 id="modal-title"></h2>
+        <button id="close" aria-label="Close">×</button>
+      </div>
+      <div id="modal-body"></div>
+      <form method="dialog">
+        <button class="wallet">Back to the floor</button>
+      </form>
+    </dialog>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

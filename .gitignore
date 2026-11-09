@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.edgeone/
+.edgeone*
+.env
+.env.*
+!.env.example
+.local-data/
+test-results/

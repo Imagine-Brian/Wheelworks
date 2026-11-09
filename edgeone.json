@@ -1,0 +1,13 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "schedules": [
+    {
+      "name": "freeze-wheel-order",
+      "cron": "10 0 * * *",
+      "timezone": "UTC",
+      "path": "/api/challenge",
+      "method": "GET"
+    }
+  ]
+}
